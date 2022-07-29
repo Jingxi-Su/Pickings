@@ -19,6 +19,8 @@ cc.Class({
   onPicked: function () {
     // 当星星被收集时，调用Game脚本中的接口，生成一个新的星星
     this.game.spawnNewStar()
+    // 调用Game脚本的得分方法
+    this.game.gainScore()
     // 销毁当前星星，通过 node.destroy() 函数，可以销毁节点
     this.node.destroy()
   },
