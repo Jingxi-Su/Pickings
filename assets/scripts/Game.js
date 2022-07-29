@@ -30,9 +30,13 @@ cc.Class({
     player: {
       default: null,
       type: cc.Node
-    }
+    },
 
     // score label的引用
+    scoreDisplay: {
+      default: null,
+      type: cc.Label
+    }
   },
 
   onLoad: function () {
@@ -40,6 +44,8 @@ cc.Class({
     this.groundY = this.ground.y + this.ground.height / 2
     // 生成新的star
     this.spawnNewStar()
+    // 初始化记分
+    this.score = 0
   },
 
   spawnNewStar: function () {
@@ -62,7 +68,12 @@ cc.Class({
     randX = (Math.random() - 0.5) * 2 * maxX
     // 返回星星坐标，setPosition可以-1.传入两个数值 x 和 y；2.传入 cc.v2(x, y) 或 cc.v3(x, y, z)（类型为 cc.Vec2 或 cc.Vec3 的对象）
     return cc.v2(randX, randY)
-  }
+  },
 
   // update (dt) {},
+  gainScore: function () {
+    this.score += 1
+    // 更新scoreDisplay Label文字
+    this.scoreDisplay.string = 'Score:' + this.score
+  }
 })
