@@ -46,6 +46,8 @@ cc.Class({
     this.node.addChild(newStar)
     //给星星设置随机位置，Node 下的 setPosition() 用于设置节点在父节点坐标系中的位置
     newStar.setPosition(this.getNewStarPosition())
+    // 在星星脚本组件上保存 Game 对象的引用(starPrefab中存在Star组件)
+    newStar.getComponent('Star').game = this;
   },
 
   getNewStarPosition: function () {
