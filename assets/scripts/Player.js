@@ -10,19 +10,31 @@ cc.Class({
     // 最大移动速度
     maxMoveSpeed: 0,
     // 加速度
-    accel: 0
+    accel: 0,
+    // 跳跃音效资源
+    jumpAudio: {
+      default: null,
+      type: cc.AudioClip
+    }
   },
   runJumpAction () {
     // 跳跃上升
-    // cc.tween()为cocos的缓动系统，by对属性进行相对值计算，使用 easing 来使缓动更生动（sineOut 正弦曲线缓出函数。）
     const jumpUp = cc.tween().by(this.jumpDuration, { y: this.jumpHeight }, { easing: 'sineOut' })
     // 下落
     const jumpDown = cc.tween().by(this.jumpDuration, { y: -this.jumpHeight }, { easing: 'sineIn' })
-    // 创建一个缓动，按jumpUp、jumpDown的顺序执行动作
-    const tween = cc.tween().sequence(jumpUp, jumpDown)
+    // 创建一个缓动
+    const tween = cc.tween()
+      // 按jumpUp、jumpDown的顺序执行动作
+      .sequence(jumpUp, jumpDown)
+      // 添加一个回调函数，在前面的动作都结束时调用我们定义的 playJumpSound() 方法
+      .call(this.playJumpSound, this)
     // 不断重复
-    // repeat/repeatForever 函数会将前一个 action 作为作用对象。但是如果有参数提供了其他的 action 或者 tween，则 repeat/repeatForever 函数会将传入的 action 或者 tween 作为作用对象。
     return cc.tween().repeatForever(tween)
+  },
+
+  playJumpSound: function () {
+    // 调用引擎播放声音
+    cc.audioEngine.playEffect(this.jumpAudio, false)
   },
 
   onKeyDown (event) {
