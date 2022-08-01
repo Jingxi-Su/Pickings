@@ -42,6 +42,9 @@ cc.Class({
   onLoad: function () {
     // 获取地平面的y轴坐标
     this.groundY = this.ground.y + this.ground.height / 2
+    // 初始化计时器
+    this.timer = 0
+    this.starDuration = 0
     // 生成新的star
     this.spawnNewStar()
     // 初始化记分
@@ -57,6 +60,9 @@ cc.Class({
     newStar.setPosition(this.getNewStarPosition())
     // 在星星脚本组件上保存 Game 对象的引用(starPrefab中存在Star组件)
     newStar.getComponent('Star').game = this
+    // 重置计时器，根据消失时间范围随机取值
+    this.starDuration = this.minStarDuration + Math.random() * (this.maxStarDuration - this.minStarDuration)
+    this.timer = 0
   },
 
   getNewStarPosition: function () {
@@ -70,10 +76,24 @@ cc.Class({
     return cc.v2(randX, randY)
   },
 
-  // update (dt) {},
   gainScore: function () {
     this.score += 1
     // 更新scoreDisplay Label文字
     this.scoreDisplay.string = 'Score:' + this.score
+  },
+
+  gameOver: function () {
+    // 停止Player节点的跳跃动作
+    this.player.stopAllActions()
+    // 重新加载场景game
+    cc.director.loadScene('game')
+  },
+
+  update: function (dt) {
+    // 每帧更新计时器，超过限度还没有生成新的星星就会调用游戏失败逻辑
+    if (this.timer > this.starDuration) {
+      this.gameOver()
+    }
+    this.timer += dt
   }
 })

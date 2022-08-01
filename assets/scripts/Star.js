@@ -34,5 +34,10 @@ cc.Class({
     if (this.getPlayerDistance() < this.pickRadius) {
       this.onPicked()
     }
+
+    // 根据Game脚本中的计时器更新星星的透明度
+    const opacityRatio = 1 - this.game.timer / this.game.starDuration
+    const minOpacity = 50
+    this.node.opacity = minOpacity + Math.floor(opacityRatio * (255 - minOpacity))
   }
 })
