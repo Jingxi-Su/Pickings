@@ -528,7 +528,7 @@
     "_id": "14DMBrdVFBJp/fry4tqSsz"
   },
   {
-    "__type__": "45b03jnf5ZBgLFeDp/mR2Lb",
+    "__type__": "f77d6mvuWJFXIaqKStwQj9G",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -542,7 +542,7 @@
     "jumpAudio": {
       "__uuid__": "dc194f1a-c8a5-46ca-aaf9-f03b70974af5"
     },
-    "_id": "677LoloypFMLbF7B9K9dP7"
+    "_id": "f0fqLUPqVHwYCFvsJPGr6Q"
   },
   {
     "__type__": "cc.Node",
@@ -686,7 +686,7 @@
     "_id": "29zXboiXFBKoIV4PQ2liTe"
   },
   {
-    "__type__": "424a7L4IRlIuYzTs4f2Qmnl",
+    "__type__": "e7d97B+dq5GtrjNaggXoLls",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -696,8 +696,6 @@
     "starPrefab": {
       "__uuid__": "36c862e8-b478-4fd5-b114-286d52b92bd5"
     },
-    "maxStarDuration": 5,
-    "minStarDuration": 3,
     "ground": {
       "__id__": 7
     },
@@ -710,6 +708,8 @@
     "scoreAudio": {
       "__uuid__": "55d110b9-bab6-4d9d-9416-03e46904fa35"
     },
-    "_id": "49Qi9LrHNB/LIOm0xVs58A"
+    "maxStarDuration": 5,
+    "minStarDuration": 3,
+    "_id": "fav8M7ewFDrZ5y9lKmLFan"
   }
 ]

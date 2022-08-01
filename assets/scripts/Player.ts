@@ -80,8 +80,12 @@ export default class NewClass extends cc.Component {
     // 初始化跳跃动作
     const jumpAction = this.runJumpAction()
     cc.tween(this.node).then(jumpAction).start()
+
+    // 加速度方向开关
     this.accLeft = false
     this.accRight = false
+
+    // 主角当前水平方向速度
     this.xSpeed = 0
 
     // 调用 cc.systemEvent，在场景加载后就开始监听键盘输入
