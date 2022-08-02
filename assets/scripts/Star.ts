@@ -1,3 +1,4 @@
+import { store } from "./Store";
 
 const { ccclass, property } = cc._decorator;
 
@@ -39,7 +40,7 @@ export default class NewClass extends cc.Component {
     }
 
     // 根据Game脚本中的计时器更新星星的透明度
-    const opacityRatio = 1 - this.game.timer / this.game.starDuration
+    const opacityRatio = 1 - store.timer / store.starDuration
     const minOpacity = 50
     this.node.opacity = minOpacity + Math.floor(opacityRatio * (255 - minOpacity))
   }

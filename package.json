@@ -1,0 +1,18 @@
+{
+  "name": "start_project",
+  "version": "1.0.0",
+  "description": "entry task 2",
+  "main": ".eslintrc.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.garena.com/jingxi.su/cocos.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mobx": "^6.6.1"
+  }
+}
