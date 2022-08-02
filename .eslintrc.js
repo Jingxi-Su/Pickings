@@ -1,11 +1,12 @@
 module.exports = {
   env: {
     browser: true,
-    es2021: true
+    es2021: true,
+    node: true
   },
-  "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint"
+  parser: '@typescript-eslint/parser',
+  plugins: [
+    '@typescript-eslint'
   ],
   extends: [
     'standard',
@@ -17,5 +18,6 @@ module.exports = {
     sourceType: 'module'
   },
   rules: {
+    'no-inferrable-types': true
   }
 }
