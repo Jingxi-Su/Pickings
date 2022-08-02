@@ -1,6 +1,9 @@
+import { observable } from "mobx";
+import { store } from "./Store";
 
 const { ccclass, property } = cc._decorator;
 
+@observable
 @ccclass
 export default class NewClass extends cc.Component {
 
@@ -32,20 +35,17 @@ export default class NewClass extends cc.Component {
   minStarDuration: number = 0
 
   groundY: number = 0
-  timer: number = 0
-  starDuration: number = 0
-  score: number = 0
 
   onLoad() {
     // 获取地平面的y轴坐标
     this.groundY = this.ground.y + this.ground.height / 2
     // 初始化计时器
-    this.timer = 0
-    this.starDuration = 0
+    store.timer = 0
+    store.starDuration = 0
     // 生成新的star
     this.spawnNewStar()
     // 初始化记分
-    this.score = 0
+    store.score = 0
   }
 
   spawnNewStar() {
@@ -58,8 +58,8 @@ export default class NewClass extends cc.Component {
     // 在星星脚本组件上保存 Game 对象的引用(starPrefab中存在Star组件)
     newStar.getComponent('Star').game = this
     // 重置计时器，根据消失时间范围随机取值
-    this.starDuration = this.minStarDuration + Math.random() * (this.maxStarDuration - this.minStarDuration)
-    this.timer = 0
+    store.starDuration = this.minStarDuration + Math.random() * (this.maxStarDuration - this.minStarDuration)
+    store.timer = 0
   }
 
   getNewStarPosition() {
@@ -74,9 +74,9 @@ export default class NewClass extends cc.Component {
   }
 
   gainScore() {
-    this.score += 1
+    store.score += 1
     // 更新scoreDisplay Label文字
-    this.scoreDisplay.string = 'Score:' + this.score
+    this.scoreDisplay.string = 'Score:' + store.score
 
     // 播放得分音效
     cc.audioEngine.playEffect(this.scoreAudio, false)
@@ -95,10 +95,10 @@ export default class NewClass extends cc.Component {
 
   update(dt: number) {
     // 每帧更新计时器，超过限度还没有生成新的星星就会调用游戏失败逻辑
-    if (this.timer > this.starDuration) {
+    if (store.timer > store.starDuration) {
       this.gameOver()
       return
     }
-    this.timer += dt
+    store.timer += dt
   }
 }
