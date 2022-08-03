@@ -18,6 +18,6 @@ module.exports = {
     sourceType: 'module'
   },
   rules: {
-    'no-inferrable-types': true
+    'no-inferrable-types': 0
   }
 }

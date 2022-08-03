@@ -1,51 +1,57 @@
-import { autorun, observable } from "mobx";
-import { State, store } from "./Store";
+import { observable } from 'mobx'
+import Player from './Player'
+import { store } from './Store'
 
-const { ccclass, property } = cc._decorator;
+const { ccclass, property } = cc._decorator
 
 @observable
 @ccclass
-export default class NewClass extends cc.Component {
-
+export default class Game extends cc.Component {
   // 此属性引用了星星的预制资源
   @property(cc.Prefab)
-  starPrefab: cc.Prefab = null
+    starPrefab: cc.Prefab = null
 
   // 地面节点，确定星星生成的高度
   @property(cc.Node)
-  ground: cc.Node = null
+    ground: cc.Node = null
 
-  //Player节点，获取主角弹跳的高度+控制主角行动开关
-  @property(cc.Node)
-  player: cc.Node = null
+  // Player节点，获取主角弹跳的高度+控制主角行动开关
+  @property(Player)
+    player: Player = null
 
   // score label的引用
   @property(cc.Label)
-  scoreDisplay: cc.Label = null
+    scoreDisplay: cc.Label = null
 
   // 得分音效资源
   @property(cc.AudioClip)
-  scoreAudio: cc.AudioClip = null
+    scoreAudio: cc.AudioClip = null
 
   // 星星产生后消失时间的随机范围
   @property
-  maxStarDuration: number = 0
+    maxStarDuration = 0
+
   @property
-  minStarDuration: number = 0
+    minStarDuration = 0
 
   // 按钮节点
   @property(cc.Node)
-  btnStart: cc.Node = null
+    btnStart: cc.Node = null
 
   // gameOver的引用
   @property(cc.Node)
-  gameOverNode: cc.Node = null
+    gameOverNode: cc.Node = null
 
-  groundY: number = 0
+  // 状态参数
+  readonly NONE: number = 0 // 游戏未开始
+  readonly PLAYING: number = 1 // 游戏进行中
+  readonly OVER: number = 2 // 游戏结束
 
-  onLoad() {
+  groundY = 0
+
+  onLoad () {
     // 初始化状态
-    store.state = State.NONE
+    this.renderState(this.NONE)
     // 获取地平面的y轴坐标
     this.groundY = this.ground.y + this.ground.height / 2
     // 初始化计时器
@@ -53,22 +59,22 @@ export default class NewClass extends cc.Component {
     store.starDuration = 0
   }
 
-  //根据游戏阶段修改按钮的显示隐藏 以及 enabled
-  renderState() {
-    switch (store.state) {
-      case State.NONE:
+  // 根据游戏阶段修改按钮的显示隐藏 以及 enabled
+  renderState (state:number) {
+    switch (state) {
+      case this.NONE:
         this.btnStart.active = true
         this.gameOverNode.active = false
         this.scoreDisplay.enabled = false
         this.enabled = false
         break
-      case State.PLAYING:
+      case this.PLAYING:
         this.btnStart.active = false
         this.gameOverNode.active = false
         this.scoreDisplay.enabled = true
         this.enabled = true
         break
-      case State.OVER:
+      case this.OVER:
         this.btnStart.active = true
         this.gameOverNode.active = true
         this.scoreDisplay.enabled = true
@@ -77,17 +83,20 @@ export default class NewClass extends cc.Component {
     }
   }
 
-  gameStart() {
-    //初始化记分
+  gameStart () {
+    // 初始化记分
     store.score = 0
     this.scoreDisplay.string = 'Score:' + store.score
+    if (!this.player.enabled) {
+      this.player.enabled = true
+      this.player.startMoveAt(cc.v2(0, this.groundY))
+    }
     // 生成新的star
-    store.setState(State.PLAYING)
-    this.renderState()
     this.spawnNewStar()
+    this.renderState(this.PLAYING)
   }
 
-  spawnNewStar() {
+  spawnNewStar () {
     // 使用给定的模版在场景中生成一个新节点。instantiate() 用于克隆指定的任意类型的对象，或者从 Prefab 实例化出新节点，返回值为 Node 或者 Object
     const newStar = cc.instantiate(this.starPrefab)
     // 将新增的节点添加到Canvas节点下。addChild() 用于在节点下添加一个新的子节点，所以新节点在场景中的显示效果在该节点之上
@@ -101,10 +110,10 @@ export default class NewClass extends cc.Component {
     store.timer = 0
   }
 
-  getNewStarPosition() {
+  getNewStarPosition () {
     let randX = 0
     // 根据地平面位置和主角跳跃高度，随机得到一个星星的y坐标
-    const randY = this.groundY + Math.random() * this.player.getComponent('Player').jumpHeight + 50
+    const randY = this.groundY + Math.random() * this.player.jumpHeight + 50
     // 根据屏幕宽度，随机得到一个星星的x坐标（原点在屏幕中心，所以需要/2）
     const maxX = this.node.width / 2
     randX = (Math.random() - 0.5) * 2 * maxX
@@ -112,7 +121,7 @@ export default class NewClass extends cc.Component {
     return cc.v2(randX, randY)
   }
 
-  gainScore() {
+  gainScore () {
     store.score += 1
     // 更新scoreDisplay Label文字
     this.scoreDisplay.string = 'Score:' + store.score
@@ -121,21 +130,14 @@ export default class NewClass extends cc.Component {
     cc.audioEngine.playEffect(this.scoreAudio, false)
   }
 
-  gameOver() {
-    // 停止Player节点的跳跃动作
-    this.player.stopAllActions()
+  gameOver () {
+    // 停止动作
+    this.player.enabled = false
     // 重新加载场景game
-    store.setState(State.OVER)
-    //cc.director.loadScene('game')
-    this.renderState()
+    this.renderState(this.OVER)
   }
 
-  start() {
-
-  }
-
-  update(dt: number) {
-    this.renderState()
+  update (dt: number) {
     // 每帧更新计时器，超过限度还没有生成新的星星就会调用游戏失败逻辑
     if (store.timer > store.starDuration) {
       this.gameOver()
