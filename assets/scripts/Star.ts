@@ -1,4 +1,5 @@
 import Game from './Game'
+import { manager } from './Manager'
 import { store } from './Store'
 
 const { ccclass, property } = cc._decorator
@@ -19,19 +20,14 @@ export default class Star extends cc.Component {
     return dist
   }
 
-  onPicked () {
-    // 当星星被收集时，调用Game脚本中的接口，生成一个新的星星
-    this.game.spawnNewStar()
-    // 调用Game脚本的得分方法
-    this.game.gainScore()
-    // 销毁当前星星，通过 node.destroy() 函数，可以销毁节点
+  destroyStar () {
     this.node.destroy()
   }
 
   update (dt: number) {
     // 每帧判断星星和主角之间的距离是否小于收集距离
     if (this.getPlayerDistance() < this.pickRadius) {
-      this.onPicked()
+      manager.onPicked(this.game, this)
       return
     }
     // 根据Game脚本中的计时器更新星星的透明度

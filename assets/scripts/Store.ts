@@ -1,4 +1,4 @@
-import { observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 
 export const enum State {
   NONE = 0, // 游戏未开始
@@ -7,17 +7,21 @@ export const enum State {
 }
 
 class Store {
-  @observable
-    state: State = State.NONE
+  state: State = State.NONE
 
-  @observable
-    timer = 0
+  timer = 0
 
-  @observable
-    starDuration = 0
+  starDuration = 0
 
-  @observable
-    score = 0
+  score = 0
+
+  constructor () {
+    makeObservable(this, {
+      score: observable,
+      timer: observable,
+      starDuration: observable
+    })
+  }
 }
 
 export const store = new Store()
