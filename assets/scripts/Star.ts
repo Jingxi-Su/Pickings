@@ -24,7 +24,7 @@ export default class Star extends cc.Component {
     this.node.destroy()
   }
 
-  update (dt: number) {
+  update () {
     // 每帧判断星星和主角之间的距离是否小于收集距离
     if (this.getPlayerDistance() < this.pickRadius) {
       manager.onPicked(this.game, this)

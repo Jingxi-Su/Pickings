@@ -55,7 +55,7 @@ export default class Background extends cc.Component {
       }
     }
 
-    update (dt:number) {
+    update () {
       this.checkBgReset(this.bgList)
       this.checkBgReset(this.groundList)
     }
