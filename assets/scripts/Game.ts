@@ -43,7 +43,15 @@ export default class Game extends cc.Component {
   @property(cc.Node)
     gameOverNode: cc.Node = null
 
+  // 星星指示器
+  @property(cc.Node)
+    leftIndicator:cc.Node = null
+
+  @property(cc.Node)
+    rightIndicator:cc.Node = null
+
   groundY:number = 0
+  currentStar:cc.Node = null
 
   onLoad () {
     // 初始化状态
@@ -69,6 +77,8 @@ export default class Game extends cc.Component {
         this.btnStart.active = true
         this.gameOverNode.active = false
         this.scoreDisplay.enabled = false
+        this.leftIndicator.active = false
+        this.rightIndicator.active = false
         this.enabled = false
         break
       case State.PLAYING:
@@ -87,6 +97,7 @@ export default class Game extends cc.Component {
   }
 
   gameStart () {
+    this.renderState(State.PLAYING)
     // 初始化记分
     store.score = 0
     if (!this.player.enabled) {
@@ -94,15 +105,27 @@ export default class Game extends cc.Component {
       this.player.startMoveAt(cc.v2(0, this.groundY))
     }
     // 生成新的star
-    manager.spawnNewStar(this)
-    this.renderState(State.PLAYING)
+    this.currentStar = manager.spawnNewStar(this)
+    this.indicatorVisible(this.currentStar.position, this.player.node.position)
   }
 
   gameOver () {
     // 停止动作
     this.player.enabled = false
+    this.currentStar.destroy()
     // 重新加载场景game
     this.renderState(State.OVER)
+  }
+
+  indicatorVisible (starPosition:cc.Vec2|cc.Vec3, playerPosition:cc.Vec2|cc.Vec3) {
+    if (starPosition.x - playerPosition.x > this.node.width / 2) {
+      this.rightIndicator.active = true
+    } else if (playerPosition.x - starPosition.x > this.node.width / 2) {
+      this.leftIndicator.active = true
+    } else {
+      this.leftIndicator.active = false
+      this.rightIndicator.active = false
+    }
   }
 
   update (dt: number) {
@@ -111,6 +134,8 @@ export default class Game extends cc.Component {
       this.gameOver()
       return
     }
+
+    this.indicatorVisible(this.currentStar.position, this.player.node.position)
     store.timer += dt
   }
 }
