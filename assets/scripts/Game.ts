@@ -50,6 +50,14 @@ export default class Game extends cc.Component {
   @property(cc.Node)
     rightIndicator:cc.Node = null
 
+  // 相机
+  @property(cc.Node)
+    mainCamera:cc.Node = null
+
+  // 相机跟随
+  @property(cc.Node)
+    uiContainer:cc.Node
+
   groundY:number = 0
   currentStar:cc.Node = null
 
@@ -91,6 +99,8 @@ export default class Game extends cc.Component {
         this.btnStart.active = true
         this.gameOverNode.active = true
         this.scoreDisplay.enabled = true
+        this.leftIndicator.active = false
+        this.rightIndicator.active = false
         this.enabled = false
         break
     }
@@ -106,7 +116,7 @@ export default class Game extends cc.Component {
     }
     // 生成新的star
     this.currentStar = manager.spawnNewStar(this)
-    this.indicatorVisible(this.currentStar.position, this.player.node.position)
+    this.indicatorVisible()
   }
 
   gameOver () {
@@ -117,15 +127,30 @@ export default class Game extends cc.Component {
     this.renderState(State.OVER)
   }
 
-  indicatorVisible (starPosition:cc.Vec2|cc.Vec3, playerPosition:cc.Vec2|cc.Vec3) {
-    if (starPosition.x - playerPosition.x > this.node.width / 2) {
+  // 需要修复判定和 position
+  indicatorVisible () {
+    const starPosition = this.currentStar.position
+    if (starPosition.x > cc.winSize.width / 2 + this.mainCamera.position.x) {
       this.rightIndicator.active = true
-    } else if (playerPosition.x - starPosition.x > this.node.width / 2) {
+    } else if (starPosition.x < -cc.winSize.width / 2 + this.mainCamera.position.x) {
       this.leftIndicator.active = true
     } else {
       this.leftIndicator.active = false
       this.rightIndicator.active = false
     }
+  }
+
+  updateCamera () {
+    const playerPos = this.player.node.position
+    const cameraPos = this.mainCamera.position
+    const distance = cc.winSize.width / 2 - this.player.node.width
+    if (playerPos.x - cameraPos.x > distance) {
+      cameraPos.x = playerPos.x - distance
+    } else if (cameraPos.x - playerPos.x > distance) {
+      cameraPos.x = playerPos.x + distance
+    }
+    this.mainCamera.setPosition(cameraPos)
+    this.uiContainer.setPosition(cameraPos.x, this.uiContainer.position.y, this.uiContainer.position.z)
   }
 
   update (dt: number) {
@@ -134,8 +159,8 @@ export default class Game extends cc.Component {
       this.gameOver()
       return
     }
-
-    this.indicatorVisible(this.currentStar.position, this.player.node.position)
+    this.updateCamera()
+    this.indicatorVisible()
     store.timer += dt
   }
 }

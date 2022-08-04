@@ -1,4 +1,4 @@
-import { action, makeObservable, observable } from 'mobx'
+import { makeObservable, observable } from 'mobx'
 
 export const enum State {
   NONE = 0, // 游戏未开始
