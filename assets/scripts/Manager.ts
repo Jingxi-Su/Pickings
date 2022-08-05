@@ -22,10 +22,9 @@ class Manager {
     let randX = 0
     // 根据地平面位置和主角跳跃高度，随机得到一个星星的y坐标
     const randY = game.groundY + Math.random() * game.player.jumpHeight + 50
-    // 根据屏幕宽度，随机得到一个星星的x坐标（原点在屏幕中心，所以需要/2）
-    // const maxX = game.node.width / 2
+    // 根据屏幕宽度，随机得到一个星星的x坐标
     const maxX = game.node.width
-    randX = (Math.random() - 0.5) * 2 * maxX
+    randX = game.player.node.position.x + (Math.random() - 0.5) * 2 * maxX
     // 返回星星坐标，setPosition可以-1.传入两个数值 x 和 y；2.传入 cc.v2(x, y) 或 cc.v3(x, y, z)（类型为 cc.Vec2 或 cc.Vec3 的对象）
     return cc.v2(randX, randY)
   }

@@ -56,7 +56,7 @@ export default class Game extends cc.Component {
 
   // 相机跟随
   @property(cc.Node)
-    uiContainer:cc.Node
+    uiContainer:cc.Node = null
 
   groundY:number = 0
   currentStar:cc.Node = null
@@ -122,6 +122,7 @@ export default class Game extends cc.Component {
   gameOver () {
     // 停止动作
     this.player.enabled = false
+    // 销毁星星
     this.currentStar.destroy()
     // 重新加载场景game
     this.renderState(State.OVER)

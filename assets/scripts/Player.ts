@@ -11,6 +11,10 @@ export default class Player extends cc.Component {
   @property
     jumpDuration = 0
 
+  // 主角跳跃形变时间
+  @property
+    squashDuration = 0
+
   // 最大移动速度
   @property
     maxMoveSpeed = 0
@@ -47,10 +51,14 @@ export default class Player extends cc.Component {
     const jumpUp = cc.tween().by(this.jumpDuration, { y: this.jumpHeight }, { easing: 'sineOut' })
     // 下落
     const jumpDown = cc.tween().by(this.jumpDuration, { y: -this.jumpHeight }, { easing: 'sineIn' })
+    // 形变
+    const squash = cc.scaleTo(this.squashDuration, 1, 0.6)
+    const stretch = cc.scaleTo(this.squashDuration, 1, 1.2)
+    const scaleBack = cc.scaleTo(this.squashDuration, 1, 1)
     // 创建一个缓动
     const tween = cc.tween()
       // 按jumpUp、jumpDown的顺序执行动作
-      .sequence(jumpUp, jumpDown)
+      .sequence(squash, stretch, jumpUp, scaleBack, jumpDown)
       // 添加一个回调函数，在前面的动作都结束时调用我们定义的 playJumpSound() 方法
       .call(this.playJumpSound, this)
     // 不断重复
