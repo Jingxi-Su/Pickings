@@ -1079,6 +1079,28 @@
     "_id": "247QduTnREB7Zwo038pBCH"
   },
   {
+    "__type__": "f77d6mvuWJFXIaqKStwQj9G",
+    "_name": "",
+    "_objFlags": 0,
+    "node": {
+      "__id__": 21
+    },
+    "_enabled": true,
+    "jumpHeight": 200,
+    "jumpDuration": 0.3,
+    "squashDuration": 0.1,
+    "motionStreak": null,
+    "maxMoveSpeed": 500,
+    "accel": 400,
+    "jumpAudio": {
+      "__uuid__": "dc194f1a-c8a5-46ca-aaf9-f03b70974af5"
+    },
+    "mainCamera": {
+      "__id__": 3
+    },
+    "_id": "f0fqLUPqVHwYCFvsJPGr6Q"
+  },
+  {
     "__type__": "cc.Sprite",
     "_name": "",
     "_objFlags": 0,
@@ -1108,25 +1130,7 @@
     "_fillRange": 0,
     "_isTrimmedMode": true,
     "_atlas": null,
-    "_id": "14DMBrdVFBJp/fry4tqSsz"
-  },
-  {
-    "__type__": "f77d6mvuWJFXIaqKStwQj9G",
-    "_name": "",
-    "_objFlags": 0,
-    "node": {
-      "__id__": 21
-    },
-    "_enabled": true,
-    "jumpHeight": 200,
-    "jumpDuration": 0.3,
-    "squashDuration": 0.1,
-    "maxMoveSpeed": 500,
-    "accel": 400,
-    "jumpAudio": {
-      "__uuid__": "dc194f1a-c8a5-46ca-aaf9-f03b70974af5"
-    },
-    "_id": "f0fqLUPqVHwYCFvsJPGr6Q"
+    "_id": "c44LFGzVJPqbEep5A2ETSE"
   },
   {
     "__type__": "cc.Node",
@@ -1836,13 +1840,13 @@
     },
     "_enabled": true,
     "starPrefab": {
-      "__uuid__": "36c862e8-b478-4fd5-b114-286d52b92bd5"
+      "__uuid__": "db94fe55-bda6-4b30-923c-8d09806f8c48"
     },
     "ground": {
       "__id__": 14
     },
     "player": {
-      "__id__": 23
+      "__id__": 22
     },
     "scoreDisplay": {
       "__id__": 30

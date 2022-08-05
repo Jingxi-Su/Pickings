@@ -1,3 +1,4 @@
+import Game from './Game'
 
 const { ccclass, property } = cc._decorator
 
@@ -14,6 +15,10 @@ export default class Player extends cc.Component {
   // 主角跳跃形变时间
   @property
     squashDuration = 0
+
+  // MotionStreak
+  @property(cc.Node)
+    motionStreak:cc.Node = null
 
   // 最大移动速度
   @property
@@ -33,6 +38,9 @@ export default class Player extends cc.Component {
 
   // 主角当前水平方向速度，正右负左
   xSpeed = 0
+
+  @property(cc.Node)
+    mainCamera:cc.Node = null
 
   onLoad () {
     // 初始化跳跃动作
@@ -74,12 +82,18 @@ export default class Player extends cc.Component {
     // 初始化键盘输入
     cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this)
     cc.systemEvent.on(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this)
+    // 初始化触控输入
+    this.node.parent.on(cc.Node.EventType.TOUCH_START, this.onTouchStart, this)
+    this.node.parent.on(cc.Node.EventType.TOUCH_END, this.onTouchEnd, this)
   }
 
   onDestroy () {
     // 取消键盘输入监听
     cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this)
     cc.systemEvent.off(cc.SystemEvent.EventType.KEY_UP, this.onKeyUp, this)
+    // 取消触控监听
+    this.node.parent.off(cc.Node.EventType.TOUCH_START, this.onTouchStart, this)
+    this.node.parent.off(cc.Node.EventType.TOUCH_END, this.onTouchEnd, this)
   }
 
   onKeyDown (event) {
@@ -87,24 +101,46 @@ export default class Player extends cc.Component {
     switch (event.keyCode) {
       // 获取键盘的A键
       case cc.macro.KEY.a:
+      case cc.macro.KEY.left:
         this.accLeft = true
+        this.accRight = false
         break
       case cc.macro.KEY.d:
+      case cc.macro.KEY.right:
         this.accRight = true
+        this.accLeft = false
         break
     }
   }
 
   onKeyUp (event) {
-    // 按下时设定flag
     switch (event.keyCode) {
       case cc.macro.KEY.a:
+      case cc.macro.KEY.left:
         this.accLeft = false
         break
       case cc.macro.KEY.d:
+      case cc.macro.KEY.right:
         this.accRight = false
         break
     }
+  }
+
+  onTouchStart (event) {
+    const touchLoc = event.getLocation()
+    if (touchLoc.x >= this.mainCamera.position.x) {
+      this.accRight = true
+      this.accLeft = false
+    } else {
+      this.accLeft = true
+      this.accRight = false
+    }
+    return true
+  }
+
+  onTouchEnd () {
+    this.accLeft = false
+    this.accRight = false
   }
 
   startMoveAt (pos: cc.Vec2) {

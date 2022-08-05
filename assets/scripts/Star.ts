@@ -34,5 +34,9 @@ export default class Star extends cc.Component {
     const opacityRatio = 1 - store.timer / store.starDuration
     const minOpacity = 50
     this.node.opacity = minOpacity + Math.floor(opacityRatio * (255 - minOpacity))
+
+    // 更新进度条
+    const progressBar = this.node.getComponent(cc.ProgressBar)
+    progressBar.progress = opacityRatio
   }
 }
