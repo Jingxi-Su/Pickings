@@ -24,12 +24,10 @@ export default class Background extends cc.Component {
     @property(cc.Node)
       mainCamera:cc.Node = null
 
-    player:cc.Node = null
     bgList:cc.Node[] = null
     groundList:cc.Node[] = null
 
     onLoad () {
-      this.player = cc.find('Canvas/Player')
       this.bgList = [this.bg_1, this.bg_2, this.bg_3]
       this.groundList = [this.ground_1, this.ground_2, this.ground_3]
       this.setBgPosition(this.bgList)
@@ -48,7 +46,7 @@ export default class Background extends cc.Component {
         const temp = background.pop()
         background.unshift(temp)
         this.setBgPosition(background)
-      } else if ((this.mainCamera.x - cc.winSize.width / 2) < (background[0].x - background[0].width / 2)) {
+      } else if ((this.mainCamera.x + cc.winSize.width / 2) > (background[2].x + background[2].width / 2)) {
         const temp = background.shift()
         background.push(temp)
         this.setBgPosition(background)
