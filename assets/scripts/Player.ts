@@ -16,10 +16,6 @@ export default class Player extends cc.Component {
   @property
     squashDuration = 0
 
-  // MotionStreak
-  @property(cc.Node)
-    motionStreak:cc.Node = null
-
   // 最大移动速度
   @property
     maxMoveSpeed = 0
