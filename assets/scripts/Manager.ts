@@ -25,16 +25,24 @@ class Manager {
     // 根据屏幕宽度，随机得到一个星星的x坐标
     const maxX = game.node.width
     randX = game.player.node.position.x + (Math.random() - 0.5) * 2 * maxX
-    // 返回星星坐标，setPosition可以-1.传入两个数值 x 和 y；2.传入 cc.v2(x, y) 或 cc.v3(x, y, z)（类型为 cc.Vec2 或 cc.Vec3 的对象）
+    // 返回星星坐标
     return cc.v2(randX, randY)
   }
 
   onPicked (game:Game, star:Star) {
-    game.currentStar = manager.spawnNewStar(game)
+    star.destroyStar()
+    this.spawnNewBoom(game, star)
     store.score += 1
     cc.audioEngine.playEffect(game.scoreAudio, false)
-    // 销毁当前星星，通过 node.destroy() 函数，可以销毁节点
-    star.destroyStar()
+    game.currentStar = manager.spawnNewStar(game)
+  }
+
+  spawnNewBoom (game:Game, star:Star) {
+    const newBoom = cc.instantiate(game.boomPrefab)
+    game.node.addChild(newBoom)
+    newBoom.setPosition(star.node.getPosition())
+    const particleBoom = newBoom.getComponent(cc.ParticleSystem)
+    return particleBoom.resetSystem()
   }
 }
 

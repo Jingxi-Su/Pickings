@@ -12,6 +12,9 @@ export default class Game extends cc.Component {
   @property(cc.Prefab)
     starPrefab: cc.Prefab = null
 
+  @property(cc.Prefab)
+    boomPrefab: cc.Prefab = null
+
   // 地面节点，确定星星生成的高度
   @property(cc.Node)
     ground: cc.Node = null
@@ -128,7 +131,6 @@ export default class Game extends cc.Component {
     this.renderState(State.OVER)
   }
 
-  // 需要修复判定和 position
   indicatorVisible () {
     const starPosition = this.currentStar.position
     if (starPosition.x > cc.winSize.width / 2 + this.mainCamera.position.x) {

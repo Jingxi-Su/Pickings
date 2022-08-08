@@ -1842,6 +1842,9 @@
     "starPrefab": {
       "__uuid__": "db94fe55-bda6-4b30-923c-8d09806f8c48"
     },
+    "boomPrefab": {
+      "__uuid__": "19e6b304-5946-47ab-9154-0c476815e78b"
+    },
     "ground": {
       "__id__": 14
     },
