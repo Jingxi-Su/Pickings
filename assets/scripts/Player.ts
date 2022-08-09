@@ -1,4 +1,3 @@
-import Game from './Game'
 
 const { ccclass, property } = cc._decorator
 
@@ -124,14 +123,13 @@ export default class Player extends cc.Component {
 
   onTouchStart (event) {
     const touchLoc = event.getLocation()
-    if (touchLoc.x >= this.mainCamera.position.x) {
+    if (touchLoc.x >= this.mainCamera.position.x + cc.winSize.width / 2) {
       this.accRight = true
       this.accLeft = false
     } else {
       this.accLeft = true
       this.accRight = false
     }
-    return true
   }
 
   onTouchEnd () {
@@ -143,7 +141,8 @@ export default class Player extends cc.Component {
     this.xSpeed = 0
     this.accLeft = false
     this.accRight = false
-    this.node.setPosition(pos)
+    this.node.x = pos.x
+    this.node.y = pos.y
     const jumpAction = this.runJumpAction()
     cc.tween(this.node).then(jumpAction).start()
   }

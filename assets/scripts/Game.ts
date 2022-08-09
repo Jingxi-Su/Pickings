@@ -63,6 +63,7 @@ export default class Game extends cc.Component {
 
   groundY:number = 0
   currentStar:cc.Node = null
+  reset:boolean = false
 
   onLoad () {
     // 初始化状态
@@ -116,6 +117,8 @@ export default class Game extends cc.Component {
     if (!this.player.enabled) {
       this.player.enabled = true
       this.player.startMoveAt(cc.v2(0, this.groundY))
+      this.reset = true
+      this.updateCamera()
     }
     // 生成新的star
     this.currentStar = manager.spawnNewStar(this)
@@ -147,11 +150,17 @@ export default class Game extends cc.Component {
     const playerPos = this.player.node.position
     const cameraPos = this.mainCamera.position
     const distance = cc.winSize.width / 2 - this.player.node.width
-    if (playerPos.x - cameraPos.x > distance) {
-      cameraPos.x = playerPos.x - distance
-    } else if (cameraPos.x - playerPos.x > distance) {
-      cameraPos.x = playerPos.x + distance
+    if (!this.reset) {
+      if (playerPos.x - cameraPos.x > distance) {
+        cameraPos.x = playerPos.x - distance
+      } else if (cameraPos.x - playerPos.x > distance) {
+        cameraPos.x = playerPos.x + distance
+      }
+    } else {
+      cameraPos.x = playerPos.x
+      this.reset = false
     }
+
     this.mainCamera.setPosition(cameraPos)
     this.uiContainer.setPosition(cameraPos.x, this.uiContainer.position.y, this.uiContainer.position.z)
   }
