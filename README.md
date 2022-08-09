@@ -1,4 +1,5 @@
-# Pick Up the Stars
+# Pick Up the Stars  
+[EN](README.md) | [CN](README.zh-CN.md)  
 A web game based on Cocos v2.4.9. 
 
 Players of this game need to manipulate an obtuse monster that never stops jumping to touch the continuously appearing stars. The dazzling acceleration will bring great challenges to players. Play with your friends and see who can obtain the most stars!
