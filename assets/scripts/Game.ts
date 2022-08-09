@@ -66,14 +66,10 @@ export default class Game extends cc.Component {
   reset:boolean = false
 
   onLoad () {
-    // 初始化状态
     this.renderState(State.NONE)
-    // 获取地平面的y轴坐标
     this.groundY = this.ground.y + this.ground.height / 2
-    // 初始化计时器
     store.timer = 0
     store.starDuration = 0
-    // 监测计分
     reaction(
       () => store.score,
       (score:number) => {
@@ -82,7 +78,10 @@ export default class Game extends cc.Component {
     )
   }
 
-  // 根据游戏阶段修改按钮的显示隐藏 以及 enabled
+  /**
+   * 根据游戏阶段修改按钮的显示隐藏 以及enabled
+   * @param state 当前状态
+   */
   renderState (state:number) {
     switch (state) {
       case State.NONE:
@@ -94,6 +93,7 @@ export default class Game extends cc.Component {
         this.enabled = false
         break
       case State.PLAYING:
+        this.player.setInputControl()
         this.btnStart.active = false
         this.gameOverNode.active = false
         this.scoreDisplay.enabled = true
@@ -110,9 +110,11 @@ export default class Game extends cc.Component {
     }
   }
 
+  /**
+   * 点击play按钮后触发
+   */
   gameStart () {
     this.renderState(State.PLAYING)
-    // 初始化记分
     store.score = 0
     if (!this.player.enabled) {
       this.player.enabled = true
@@ -120,20 +122,22 @@ export default class Game extends cc.Component {
       this.reset = true
       this.updateCamera()
     }
-    // 生成新的star
     this.currentStar = manager.spawnNewStar(this)
     this.indicatorVisible()
   }
 
+  /**
+   * 游戏失败
+   */
   gameOver () {
-    // 停止动作
     this.player.enabled = false
-    // 销毁星星
     this.currentStar.destroy()
-    // 重新加载场景game
     this.renderState(State.OVER)
   }
 
+  /**
+   * 处理左右指示箭头的显示隐藏
+   */
   indicatorVisible () {
     const starPosition = this.currentStar.position
     if (starPosition.x > cc.winSize.width / 2 + this.mainCamera.position.x) {
@@ -146,6 +150,9 @@ export default class Game extends cc.Component {
     }
   }
 
+  /**
+   * 相机跟随主角移动
+   */
   updateCamera () {
     const playerPos = this.player.node.position
     const cameraPos = this.mainCamera.position
@@ -165,8 +172,10 @@ export default class Game extends cc.Component {
     this.uiContainer.setPosition(cameraPos.x, this.uiContainer.position.y, this.uiContainer.position.z)
   }
 
+  /**
+   * 每帧更新计时器，超过限度还没有摘除星星就会调用游戏失败逻辑
+   */
   update (dt: number) {
-    // 每帧更新计时器，超过限度还没有生成新的星星就会调用游戏失败逻辑
     if (store.timer > store.starDuration) {
       this.gameOver()
       return

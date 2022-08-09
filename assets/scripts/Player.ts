@@ -41,14 +41,15 @@ export default class Player extends cc.Component {
     // 初始化跳跃动作
     const jumpAction = this.runJumpAction()
     cc.tween(this.node).then(jumpAction).start()
-    // 加速度方向开关
     this.accLeft = false
     this.accRight = false
-    // 主角当前水平方向速度
     this.xSpeed = 0
-    this.setInputControl()
   }
 
+  /**
+   * 定义player的跳跃动作
+   * @returns
+   */
   runJumpAction () {
     // 上升
     const jumpUp = cc.tween().by(this.jumpDuration, { y: this.jumpHeight }, { easing: 'sineOut' })
@@ -68,11 +69,16 @@ export default class Player extends cc.Component {
     return cc.tween().repeatForever(tween)
   }
 
+  /**
+   * 调用引擎播放跳跃声音
+   */
   playJumpSound () {
-    // 调用引擎播放声音
     cc.audioEngine.playEffect(this.jumpAudio, false)
   }
 
+  /**
+   * 初始化事件监听
+   */
   setInputControl () {
     // 初始化键盘输入
     cc.systemEvent.on(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this)
@@ -82,6 +88,9 @@ export default class Player extends cc.Component {
     this.node.parent.on(cc.Node.EventType.TOUCH_END, this.onTouchEnd, this)
   }
 
+  /**
+   * 取消事件监听
+   */
   onDestroy () {
     // 取消键盘输入监听
     cc.systemEvent.off(cc.SystemEvent.EventType.KEY_DOWN, this.onKeyDown, this)
@@ -91,10 +100,12 @@ export default class Player extends cc.Component {
     this.node.parent.off(cc.Node.EventType.TOUCH_END, this.onTouchEnd, this)
   }
 
+  /**
+   * 按下按键回调
+   * @param event
+   */
   onKeyDown (event) {
-    // 按下时设定flag
     switch (event.keyCode) {
-      // 获取键盘的A键
       case cc.macro.KEY.a:
       case cc.macro.KEY.left:
         this.accLeft = true
@@ -108,6 +119,10 @@ export default class Player extends cc.Component {
     }
   }
 
+  /**
+   * 松开按键回调
+   * @param event
+   */
   onKeyUp (event) {
     switch (event.keyCode) {
       case cc.macro.KEY.a:
@@ -121,6 +136,10 @@ export default class Player extends cc.Component {
     }
   }
 
+  /**
+   * 开始触摸
+   * @param event
+   */
   onTouchStart (event) {
     const touchLoc = event.getLocation()
     if (touchLoc.x >= this.mainCamera.position.x + cc.winSize.width / 2) {
@@ -132,11 +151,18 @@ export default class Player extends cc.Component {
     }
   }
 
+  /**
+   * 结束触摸
+   */
   onTouchEnd () {
     this.accLeft = false
     this.accRight = false
   }
 
+  /**
+   * 指定位置开始运动
+   * @param pos 指定位置
+   */
   startMoveAt (pos: cc.Vec2) {
     this.xSpeed = 0
     this.accLeft = false
@@ -147,24 +173,27 @@ export default class Player extends cc.Component {
     cc.tween(this.node).then(jumpAction).start()
   }
 
+  /**
+   * 根据当前加速度方向每帧更新速度
+   * @param dt
+   */
   update (dt: number) {
-    // 根据当前加速度方向每帧更新速度
     if (this.accLeft) {
       this.xSpeed -= this.accel * dt
     } else if (this.accRight) {
       this.xSpeed += this.accel * dt
     }
 
-    // 限制主角的速度不能超过最大值
     if (Math.abs(this.xSpeed) > this.maxMoveSpeed) {
       this.xSpeed = this.maxMoveSpeed * this.xSpeed / Math.abs(this.xSpeed)
     }
 
-    // 根据当前速度更新主角的位置
     this.node.x += this.xSpeed * dt
   }
 
-  // 当组件的 enabled 属性从 true 变为 false 时，会激活 onDisable 回调，同时停止update
+  /**
+   * 当组件的 enabled 属性从 true 变为 false 时，会激活 onDisable 回调，同时停止update
+   */
   onDisable () {
     this.node.stopAllActions()
   }

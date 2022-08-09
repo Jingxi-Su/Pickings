@@ -11,11 +11,11 @@ export default class Star extends cc.Component {
     pickRadius = 0
 
   game:Game = null
-
+  /**
+   * 根据Player节点位置判断距离
+   */
   getPlayerDistance () {
-    // 根据Player节点位置判断距离
     const playerPos = this.game.player.node.position
-    // 根据两点位置计算两点之间的距离
     const dist = this.node.position.sub(playerPos).mag()
     return dist
   }
@@ -24,18 +24,19 @@ export default class Star extends cc.Component {
     this.node.destroy()
   }
 
+  /**
+   * 每帧判断星星和主角之间的距离是否小于收集距离并且更新透明度和进度条
+   */
   update () {
-    // 每帧判断星星和主角之间的距离是否小于收集距离
     if (this.getPlayerDistance() < this.pickRadius) {
       manager.onPicked(this.game, this)
       return
     }
-    // 根据Game脚本中的计时器更新星星的透明度
+
     const opacityRatio = 1 - store.timer / store.starDuration
     const minOpacity = 50
     this.node.opacity = minOpacity + Math.floor(opacityRatio * (255 - minOpacity))
 
-    // 更新进度条
     const progressBar = this.node.getComponent(cc.ProgressBar)
     progressBar.progress = opacityRatio
   }

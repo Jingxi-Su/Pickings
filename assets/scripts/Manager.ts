@@ -3,32 +3,40 @@ import Star from './Star'
 import { store } from './Store'
 
 class Manager {
+  /**
+   * 生成新的星星
+   * @param game 当前Game实例
+   * @returns
+   */
   spawnNewStar (game:Game) {
-    // 使用给定的模版在场景中生成一个新节点
     const newStar = cc.instantiate(game.starPrefab)
-    // 将新增的节点添加到Canvas节点下
     game.node.addChild(newStar)
-    // 给星星设置随机位置
     newStar.setPosition(this.getNewStarPosition(game))
-    // 在星星脚本组件上保存 Game 对象的引用(starPrefab中存在Star组件)
+    // 在星星脚本组件上保存 Game 对象的引用
     newStar.getComponent('Star').game = game
-    // 重置计时器，根据消失时间范围随机取值
     store.starDuration = game.minStarDuration + Math.random() * (game.maxStarDuration - game.minStarDuration)
     store.timer = 0
     return newStar
   }
 
+  /**
+   * 给星星设置随机位置
+   * @param game 当前Game实例
+   * @returns
+   */
   getNewStarPosition (game:Game) {
     let randX = 0
-    // 根据地平面位置和主角跳跃高度，随机得到一个星星的y坐标
     const randY = game.groundY + Math.random() * game.player.jumpHeight + 50
-    // 根据屏幕宽度，随机得到一个星星的x坐标
     const maxX = game.node.width
     randX = game.player.node.position.x + (Math.random() - 0.5) * 2 * maxX
-    // 返回星星坐标
     return cc.v2(randX, randY)
   }
 
+  /**
+   * 摘除成功
+   * @param game 当前Game实例
+   * @param star 当前Star实例
+   */
   onPicked (game:Game, star:Star) {
     star.destroyStar()
     this.spawnNewBoom(game, star)
@@ -37,6 +45,11 @@ class Manager {
     game.currentStar = manager.spawnNewStar(game)
   }
 
+  /**
+   * 摘除成功后播放爆炸粒子效果
+   * @param game 当前Game实例
+   * @param star 当前Star实例
+   */
   spawnNewBoom (game:Game, star:Star) {
     const newBoom = cc.instantiate(game.boomPrefab)
     game.node.addChild(newBoom)

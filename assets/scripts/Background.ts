@@ -34,13 +34,19 @@ export default class Background extends cc.Component {
       this.setBgPosition(this.groundList)
     }
 
-    // 设置连续背景图坐标
+    /**
+     * 设置连续背景图坐标
+     * @param background 背景数组
+     */
     setBgPosition (background:cc.Node[]) {
       background[0].x = background[1].x - background[0].width
       background[2].x = background[1].x + background[2].width
     }
 
-    // 检查是否要重置位置
+    /**
+     * 检查是否要重置背景位置
+     * @param background 背景数组
+     */
     checkBgReset (background:cc.Node[]) {
       if ((this.mainCamera.x - cc.winSize.width / 2) < (background[0].x - background[0].width / 2)) {
         const temp = background.pop()
