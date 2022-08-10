@@ -8,26 +8,27 @@ const { ccclass, property } = cc._decorator
 export default class Star extends cc.Component {
   @property
   // 星星和主角之间的距离小于这个数值时，就会完成收集
-    pickRadius = 0
+  pickRadius = 0
 
-  game:Game = null
+  game: Game = null
   /**
    * 根据Player节点位置判断距离
    */
-  getPlayerDistance () {
+  getPlayerDistance() {
     const playerPos = this.game.player.node.position
     const dist = this.node.position.sub(playerPos).mag()
     return dist
   }
 
-  destroyStar () {
+  //FIXME:调用方直接销毁即可，不用再封装方法
+  destroyStar() {
     this.node.destroy()
   }
 
   /**
    * 每帧判断星星和主角之间的距离是否小于收集距离并且更新透明度和进度条
    */
-  update () {
+  update() {
     if (this.getPlayerDistance() < this.pickRadius) {
       manager.onPicked(this.game, this)
       return

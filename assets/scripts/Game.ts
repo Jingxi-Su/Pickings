@@ -10,69 +10,70 @@ const { ccclass, property } = cc._decorator
 export default class Game extends cc.Component {
   // 此属性引用了星星的预制资源
   @property(cc.Prefab)
-    starPrefab: cc.Prefab = null
+  starPrefab: cc.Prefab = null
 
   @property(cc.Prefab)
-    boomPrefab: cc.Prefab = null
+  boomPrefab: cc.Prefab = null
 
   // 地面节点，确定星星生成的高度
   @property(cc.Node)
-    ground: cc.Node = null
+  ground: cc.Node = null
 
   // Player节点，获取主角弹跳的高度+控制主角行动开关
   @property(Player)
-    player: Player = null
+  player: Player = null
 
   // score label的引用
   @property(cc.Label)
-    scoreDisplay: cc.Label = null
+  scoreDisplay: cc.Label = null
 
   // 得分音效资源
   @property(cc.AudioClip)
-    scoreAudio: cc.AudioClip = null
+  scoreAudio: cc.AudioClip = null
 
   // 星星产生后消失时间的随机范围
   @property
-    maxStarDuration = 0
+  maxStarDuration = 0
 
   @property
-    minStarDuration = 0
+  minStarDuration = 0
 
   // 按钮节点
   @property(cc.Node)
-    btnStart: cc.Node = null
+  btnStart: cc.Node = null
 
   // gameOver的引用
   @property(cc.Node)
-    gameOverNode: cc.Node = null
+  gameOverNode: cc.Node = null
 
   // 星星指示器
   @property(cc.Node)
-    leftIndicator:cc.Node = null
+  leftIndicator: cc.Node = null
 
   @property(cc.Node)
-    rightIndicator:cc.Node = null
+  rightIndicator: cc.Node = null
 
   // 相机
   @property(cc.Node)
-    mainCamera:cc.Node = null
+  mainCamera: cc.Node = null
 
   // 相机跟随
   @property(cc.Node)
-    uiContainer:cc.Node = null
+  uiContainer: cc.Node = null
 
-  groundY:number = 0
-  currentStar:cc.Node = null
-  reset:boolean = false
+  groundY: number = 0
+  currentStar: cc.Node = null
+  reset: boolean = false
 
-  onLoad () {
+  onLoad() {
+    //FIXME: 都用 mobx 了，可以通过 store.state 来设置
     this.renderState(State.NONE)
     this.groundY = this.ground.y + this.ground.height / 2
     store.timer = 0
     store.starDuration = 0
     reaction(
       () => store.score,
-      (score:number) => {
+      (score: number) => {
         this.scoreDisplay.string = 'Score:' + score
       }
     )
@@ -82,7 +83,8 @@ export default class Game extends cc.Component {
    * 根据游戏阶段修改按钮的显示隐藏 以及enabled
    * @param state 当前状态
    */
-  renderState (state:number) {
+  //FIXME: 都用 mobx 了，可以通过 store.state 来设置
+  renderState(state: number) {
     switch (state) {
       case State.NONE:
         this.btnStart.active = true
@@ -113,8 +115,9 @@ export default class Game extends cc.Component {
   /**
    * 点击play按钮后触发
    */
-  gameStart () {
+  gameStart() {
     this.renderState(State.PLAYING)
+    //FIXME: 都用 mobx 了，可以通过 store.state 来设置
     store.score = 0
     if (!this.player.enabled) {
       this.player.enabled = true
@@ -129,7 +132,8 @@ export default class Game extends cc.Component {
   /**
    * 游戏失败
    */
-  gameOver () {
+  gameOver() {
+    //FIXME: 都用 mobx 了，可以通过 store.state 来设置
     this.player.enabled = false
     this.currentStar.destroy()
     this.renderState(State.OVER)
@@ -138,7 +142,7 @@ export default class Game extends cc.Component {
   /**
    * 处理左右指示箭头的显示隐藏
    */
-  indicatorVisible () {
+  indicatorVisible() {
     const starPosition = this.currentStar.position
     if (starPosition.x > cc.winSize.width / 2 + this.mainCamera.position.x) {
       this.rightIndicator.active = true
@@ -153,10 +157,11 @@ export default class Game extends cc.Component {
   /**
    * 相机跟随主角移动
    */
-  updateCamera () {
+  updateCamera() {
     const playerPos = this.player.node.position
     const cameraPos = this.mainCamera.position
     const distance = cc.winSize.width / 2 - this.player.node.width
+    //FIXME: reset 可以改成方法传参
     if (!this.reset) {
       if (playerPos.x - cameraPos.x > distance) {
         cameraPos.x = playerPos.x - distance
@@ -175,7 +180,7 @@ export default class Game extends cc.Component {
   /**
    * 每帧更新计时器，超过限度还没有摘除星星就会调用游戏失败逻辑
    */
-  update (dt: number) {
+  update(dt: number) {
     if (store.timer > store.starDuration) {
       this.gameOver()
       return
