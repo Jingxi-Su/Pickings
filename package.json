@@ -13,8 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "mobx": "^6.6.1",
-    "mobx-cocos": "^1.1.4"
+    "mobx": "^6.6.1"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.32.0",
