@@ -1,35 +1,28 @@
 import Game from './Game'
-import { manager } from './Manager'
+import { starManager } from './StarManager'
 import { store } from './Store'
 
 const { ccclass, property } = cc._decorator
 
+/** 星星类，包括判定星星是否被收集 */
 @ccclass
 export default class Star extends cc.Component {
+  /** 星星和主角之间的距离小于这个数值时，就会完成收集 */
   @property
-  // 星星和主角之间的距离小于这个数值时，就会完成收集
-    pickRadius = 0
+  private pickRadius = 0
 
-  game:Game = null
-  /**
-   * 根据Player节点位置判断距离
-   */
-  getPlayerDistance () {
+  private game: Game = null
+  /** 根据Player节点位置判断距离 */
+  private getPlayerDistance ():number {
     const playerPos = this.game.player.node.position
     const dist = this.node.position.sub(playerPos).mag()
     return dist
   }
 
-  destroyStar () {
-    this.node.destroy()
-  }
-
-  /**
-   * 每帧判断星星和主角之间的距离是否小于收集距离并且更新透明度和进度条
-   */
+  /** 每帧判断星星和主角之间的距离是否小于收集距离并且更新透明度和进度条 */
   update () {
     if (this.getPlayerDistance() < this.pickRadius) {
-      manager.onPicked(this.game, this)
+      starManager.onPicked(this.game, this)
       return
     }
 

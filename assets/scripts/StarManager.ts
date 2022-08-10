@@ -2,13 +2,14 @@ import Game from './Game'
 import Star from './Star'
 import { store } from './Store'
 
-class Manager {
+/** 星星管理类，包括星星的生成、收集以及收集完成后的爆炸效果等 */
+class StarManager {
   /**
    * 生成新的星星
    * @param game 当前Game实例
    * @returns
    */
-  spawnNewStar (game:Game) {
+  public spawnNewStar (game: Game):cc.Node {
     const newStar = cc.instantiate(game.starPrefab)
     game.node.addChild(newStar)
     newStar.setPosition(this.getNewStarPosition(game))
@@ -24,7 +25,7 @@ class Manager {
    * @param game 当前Game实例
    * @returns
    */
-  getNewStarPosition (game:Game) {
+  private getNewStarPosition (game: Game):cc.Vec2 {
     let randX = 0
     const randY = game.groundY + Math.random() * game.player.jumpHeight + 50
     const maxX = game.node.width
@@ -37,12 +38,12 @@ class Manager {
    * @param game 当前Game实例
    * @param star 当前Star实例
    */
-  onPicked (game:Game, star:Star) {
-    star.destroyStar()
+  public onPicked (game: Game, star: Star) {
+    star.node.destroy()
     this.spawnNewBoom(game, star)
     store.score += 1
     cc.audioEngine.playEffect(game.scoreAudio, false)
-    game.currentStar = manager.spawnNewStar(game)
+    game.currentStar = this.spawnNewStar(game)
   }
 
   /**
@@ -50,7 +51,7 @@ class Manager {
    * @param game 当前Game实例
    * @param star 当前Star实例
    */
-  spawnNewBoom (game:Game, star:Star) {
+  private spawnNewBoom (game: Game, star: Star) {
     const newBoom = cc.instantiate(game.boomPrefab)
     game.node.addChild(newBoom)
     newBoom.setPosition(star.node.getPosition())
@@ -59,4 +60,4 @@ class Manager {
   }
 }
 
-export const manager = new Manager()
+export const starManager = new StarManager()

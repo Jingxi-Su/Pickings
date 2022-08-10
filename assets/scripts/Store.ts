@@ -1,18 +1,14 @@
 import { makeObservable, observable } from 'mobx'
 
-export const enum State {
-  NONE = 0, // 游戏未开始
-  PLAYING = 1, // 游戏进行中
-  OVER = 2 // 游戏结束
-}
-
+/** mobx状态管理库 */
 class Store {
-  state: State = State.NONE
-
+  /** 计时器 */
   timer = 0
 
+  /** 星星持续时间 */
   starDuration = 0
 
+  /** 分数 */
   score = 0
 
   constructor () {
