@@ -11,68 +11,68 @@ const { ccclass, property } = cc._decorator
 export default class Game extends cc.Component {
   /** 此属性引用了星星的预制资源 */
   @property(cc.Prefab)
-    starPrefab: cc.Prefab = null
+  public starPrefab: cc.Prefab = null
 
   /** 此属性引用了星星爆炸的预制资源 */
   @property(cc.Prefab)
-    boomPrefab: cc.Prefab = null
+  public boomPrefab: cc.Prefab = null
 
   /** 地面节点，确定星星生成的高度 */
   @property(cc.Node)
-    ground: cc.Node = null
+  private ground: cc.Node = null
 
   /** Player节点，获取主角弹跳的高度+控制主角行动开关 */
   @property(Player)
-    player: Player = null
+  public player: Player = null
 
   /** score label的引用 */
   @property(cc.Label)
-    scoreDisplay: cc.Label = null
+  private scoreDisplay: cc.Label = null
 
   /** 得分音效资源 */
   @property(cc.AudioClip)
-    scoreAudio: cc.AudioClip = null
+  public scoreAudio: cc.AudioClip = null
 
   /** 游戏结束音效资源 */
   @property(cc.AudioClip)
-    overAudio: cc.AudioClip = null
+  private overAudio: cc.AudioClip = null
 
   /** 星星产生后消失时间的随机范围最大值 */
   @property
-    maxStarDuration = 0
+  public maxStarDuration = 0
 
   /** 星星产生后消失时间的随机范围最小值 */
   @property
-    minStarDuration = 0
+  public minStarDuration = 0
 
   /** 按钮节点 */
   @property(cc.Node)
-    btnStart: cc.Node = null
+  private btnStart: cc.Node = null
 
   /** gameOver的引用 */
   @property(cc.Node)
-    gameOverNode: cc.Node = null
+  private gameOverNode: cc.Node = null
 
   /** 星星指示器-左 */
   @property(cc.Node)
-    leftIndicator: cc.Node = null
+  private leftIndicator: cc.Node = null
 
   /** 星星指示器-右 */
   @property(cc.Node)
-    rightIndicator: cc.Node = null
+  private rightIndicator: cc.Node = null
 
   /** 相机节点 */
   @property(cc.Node)
-    mainCamera: cc.Node = null
+  private mainCamera: cc.Node = null
 
   /** 相机跟随节点 */
   @property(cc.Node)
-    uiContainer: cc.Node = null
+  private uiContainer: cc.Node = null
 
   /** 地平面 */
-  groundY: number = 0
+  public groundY: number = 0
   /** 当前星星节点 */
-  currentStar: cc.Node = null
+  public currentStar: cc.Node = null
 
   onLoad () {
     this.setInitUI()
@@ -87,7 +87,7 @@ export default class Game extends cc.Component {
     )
   }
 
-  setInitUI () {
+  private setInitUI () {
     this.btnStart.active = true
     this.gameOverNode.active = false
     this.scoreDisplay.enabled = false
@@ -109,7 +109,7 @@ export default class Game extends cc.Component {
     this.indicatorVisible()
   }
 
-  setPlayingUI () {
+  private setPlayingUI () {
     this.player.setInputControl()
     this.btnStart.active = false
     this.gameOverNode.active = false
@@ -125,7 +125,7 @@ export default class Game extends cc.Component {
     this.setOverUI()
   }
 
-  setOverUI () {
+  private setOverUI () {
     this.btnStart.active = true
     this.gameOverNode.active = true
     this.scoreDisplay.enabled = true

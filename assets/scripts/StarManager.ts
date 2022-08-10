@@ -9,7 +9,7 @@ class StarManager {
    * @param game 当前Game实例
    * @returns
    */
-  spawnNewStar (game: Game):cc.Node {
+  public spawnNewStar (game: Game):cc.Node {
     const newStar = cc.instantiate(game.starPrefab)
     game.node.addChild(newStar)
     newStar.setPosition(this.getNewStarPosition(game))
@@ -25,7 +25,7 @@ class StarManager {
    * @param game 当前Game实例
    * @returns
    */
-  getNewStarPosition (game: Game):cc.Vec2 {
+  private getNewStarPosition (game: Game):cc.Vec2 {
     let randX = 0
     const randY = game.groundY + Math.random() * game.player.jumpHeight + 50
     const maxX = game.node.width
@@ -38,7 +38,7 @@ class StarManager {
    * @param game 当前Game实例
    * @param star 当前Star实例
    */
-  onPicked (game: Game, star: Star) {
+  public onPicked (game: Game, star: Star) {
     star.node.destroy()
     this.spawnNewBoom(game, star)
     store.score += 1
@@ -51,7 +51,7 @@ class StarManager {
    * @param game 当前Game实例
    * @param star 当前Star实例
    */
-  spawnNewBoom (game: Game, star: Star) {
+  private spawnNewBoom (game: Game, star: Star) {
     const newBoom = cc.instantiate(game.boomPrefab)
     game.node.addChild(newBoom)
     newBoom.setPosition(star.node.getPosition())

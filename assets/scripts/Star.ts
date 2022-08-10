@@ -9,9 +9,9 @@ const { ccclass, property } = cc._decorator
 export default class Star extends cc.Component {
   /** 星星和主角之间的距离小于这个数值时，就会完成收集 */
   @property
-    pickRadius = 0
+  private pickRadius = 0
 
-  game: Game = null
+  private game: Game = null
   /** 根据Player节点位置判断距离 */
   private getPlayerDistance ():number {
     const playerPos = this.game.player.node.position

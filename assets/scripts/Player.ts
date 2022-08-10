@@ -6,39 +6,39 @@ const { ccclass, property } = cc._decorator
 export default class Player extends cc.Component {
   /** 主角跳跃高度 */
   @property
-    jumpHeight = 0
+  public jumpHeight = 0
 
   /** 主角跳跃持续时间 */
   @property
-    jumpDuration = 0
+  private jumpDuration = 0
 
   /** 主角跳跃形变时间 */
   @property
-    squashDuration = 0
+  private squashDuration = 0
 
   /** 最大移动速度 */
   @property
-    maxMoveSpeed = 0
+  private maxMoveSpeed = 0
 
   /** 加速度 */
   @property
-    accel = 0
+  private accel = 0
 
   /** 跳跃音效资源 */
   @property(cc.AudioClip)
-    jumpAudio: cc.AudioClip = null
+  private jumpAudio: cc.AudioClip = null
 
   /** 相机节点 */
   @property(cc.Node)
-    mainCamera: cc.Node = null
+  private mainCamera: cc.Node = null
 
   /** 左加速度方向开关 */
-  accLeft = false
+  private accLeft = false
   /** 右加速度方向开关 */
-  accRight = false
+  private accRight = false
 
   /** 主角当前水平方向速度，正右负左 */
-  xSpeed = 0
+  private xSpeed = 0
 
   onLoad () {
     this.startMove()

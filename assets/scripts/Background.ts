@@ -5,21 +5,22 @@ const { ccclass, property } = cc._decorator
 export default class Background extends cc.Component {
     /** 连续背景-1 */
     @property(cc.Node)
-      bg_1: cc.Node = null
+  private bg_1: cc.Node = null
 
     /** 连续背景-2 */
     @property(cc.Node)
-      bg_2: cc.Node = null
+    private bg_2: cc.Node = null
 
     /** 连续背景-3 */
     @property(cc.Node)
-      bg_3: cc.Node = null
+    private bg_3: cc.Node = null
 
     /** 相机节点 */
     @property(cc.Node)
-      mainCamera:cc.Node = null
+    private mainCamera:cc.Node = null
 
-    bgList:cc.Node[] = null
+    /** 背景数组 */
+    private bgList:cc.Node[] = null
 
     onLoad () {
       this.bgList = [this.bg_1, this.bg_2, this.bg_3]
